@@ -1,0 +1,24 @@
+{
+  "name": "angularfire-model",
+  "main": "angularfire-model.js",
+  "version": "0.0.0",
+  "authors": [
+    "Marco Pesani <marco.pesani@gmail.com>"
+  ],
+  "description": "Wrapper for angularfire aimed to simplify data modeling",
+  "keywords": [
+    "angular",
+    "angularjs",
+    "firebase",
+    "angularfire",
+    "model"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
