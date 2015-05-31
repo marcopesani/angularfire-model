@@ -1,4 +1,4 @@
-angular.module('angularfire-model', [])
-    .directive('$firebaseModel', function () {
+angular.module('marcopesani.ngFirebaseModel', [])
+    .factory('$firebaseModel', function () {
         // implementation goes here
     });
