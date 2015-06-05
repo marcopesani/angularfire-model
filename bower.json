@@ -1,36 +1,36 @@
 {
-    "name": "angularfire-model",
-    "main": "dist/angularfire-model.js",
-    "version": "0.0.0",
-    "authors": [
-        "Marco Pesani <marco.pesani@gmail.com>"
-    ],
-    "description": "Wrapper for angularfire aimed to simplify data modeling",
-    "keywords": [
-        "angular",
-        "angularjs",
-        "firebase",
-        "angularfire",
-        "model"
-    ],
-    "license": "MIT",
-    "ignore": [
-        "**/.*",
-        "node_modules",
-        "bower_components",
-        "src",
-        "test",
-        "tests",
-        "package.json",
-        "Gruntfile.js"
-    ],
-    "dependencies": {
-        "angular": "1.3.x || 1.4.x",
-        "firebase": "2.2.x",
-        "angularfire": "1.x.x"
-    },
-    "devDependencies": {
-        "angular-mocks": "~1.3.11",
-        "mockfirebase": "~0.10.1"
-    }
+  "name": "angularfire-model",
+  "main": "dist/angularfire-model.js",
+  "version": "0.0.0",
+  "authors": [
+    "Marco Pesani <marco.pesani@gmail.com>"
+  ],
+  "description": "Wrapper for angularfire aimed to simplify data modeling",
+  "keywords": [
+    "angular",
+    "angularjs",
+    "firebase",
+    "angularfire",
+    "model"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src",
+    "test",
+    "tests",
+    "package.json",
+    "Gruntfile.js"
+  ],
+  "dependencies": {
+    "angular": "1.3.x || 1.4.x",
+    "firebase": "2.2.x",
+    "angularfire": "1.x.x"
+  },
+  "devDependencies": {
+    "mockfirebase": "~0.11.0",
+    "angular-mocks": "~1.4.0"
+  }
 }
