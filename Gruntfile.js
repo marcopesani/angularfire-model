@@ -18,8 +18,8 @@ module.exports = function (grunt) {
             //},
             dist: {
                 src: [
-                    'src/angularfire-model-validator.js',
-                    'src/angularfire-model.js'
+                    'src/angularfire-model.js',
+                    'src/angularfire-model-validator.js'
                 ],
                 dest: 'dist/angularfire-model.js'
             }
@@ -55,14 +55,24 @@ module.exports = function (grunt) {
             gruntfile: {
                 src: 'gruntfile.js'
             },
-            lib_test: {
-                src: ['src/**/*.js', 'test/**/*.js']
+            src_test: {
+                src: ['src/**/*.js']
+            }
+        },
+        karma: {
+            unit: {
+                configFile: 'karma.conf.js',
+                background: true,
+                singleRun: false
             }
         },
         watch: {
-            gruntfile: {
-                files: '<%= jshint.gruntfile.src %>',
-                tasks: ['jshint:gruntfile']
+            dev: {
+                files: 'src/**/*.js',
+                tasks: ['dev'],
+                options: {
+                    interrupt: true
+                }
             }
         }
     });
@@ -71,8 +81,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
-    // Default task
-    grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'watch']);
+    grunt.registerTask('dev', ['jshint', 'concat', 'uglify']);
+    grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'karma', 'watch']);
 };

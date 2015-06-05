@@ -7,7 +7,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('marcopesani.ngFirebaseModelValidator').factory('$firebaseModelValidator', [
+    angular.module('marcopesani.ngFirebaseModel').factory('$firebaseModelValidator', [
         '$log',
         function ($log) {
             /**
@@ -29,50 +29,9 @@
             FirebaseModelValidator.prototype = {
                 /**
                  * Add a rule to validate a specific attribute of the model.
-                 *
-                 * Basic Rules
-                 * - NotBlank
-                 * - Blank
-                 * - NotNull
-                 * - Null
-                 * - True
-                 * - False
-                 * - Type
-                 *
-                 * String rules
-                 * - Email
-                 * - Length
-                 * - Url
-                 * - Regex
-                 * - Ip
-                 * - Uuid
-                 *
-                 * Number rules
-                 * - Range
-                 *
-                 * Vincoli di confronto
-                 * - EqualTo
-                 * - NotEqualTo
-                 * - IdenticalTo
-                 * - NotIdenticalTo
-                 * - LessThan
-                 * - LessThanOrEqual
-                 * - GreaterThan
-                 * - GreaterThanOrEqual
-                 *
-                 * - Date rules
-                 * - Date
-                 * - DateTime
-                 * - Time
-                 *
-                 * Group rules
-                 * - Choice
-                 * - Collection
-                 * - Count
-                 * - UniqueEntity
-                 * - Language
-                 * - Locale
-                 * - Country
+                 * 
+                 * Validation rules inspired by:
+                 * http://symfony.com/it/doc/current/book/validation.html
                  *
                  * @param {String} key
                  * @param {String} type
@@ -82,19 +41,21 @@
                  */
                 $addValidationRule: function (key, type, options) {
                     if (key && type) {
-                        this.$$rules[key] = {};
-                        this.$$rules[key].type = type;
-                        if (options) {
-                            this.$$rules[key].options = options;
-                        }
+                        var rule = {
+                            type: type,
+                            options: options || undefined
+                        };
+                        this.$$rules[key] = this.$$rules[key] || [];
+                        this.$$rules[key].push(rule);
                     } else {
                         $log.error('$firebaseModel.$addValidationRule requires the key to check and the rule to apply.');
                     }
                 },
                 $validate: function (object) {
-                    var message = {
-                        success: true
-                    };
+                    var self = this,
+                        message = {
+                            success: true
+                        };
 
                     function addError(key, error) {
                         message.success = false;
@@ -103,42 +64,43 @@
                     }
 
                     angular.forEach(this.$$rules, function (value, key) {
-                        var rule = value.type;
+                        var rules = self.$$rules[key];
 
-                        switch (rule) {
-                        case 'NotBlank':
-                            if (!object[key] || object[key] === '') {
-                                addError(key, key + ': This value should not be blank');
+                        angular.forEach(rules, function (rule) {
+
+                            switch (rule.type) {
+                            case 'NotBlank':
+                                if (!object[key] || object[key] === '') {
+                                    addError(key, 'This value should not be blank');
+                                }
+                                break;
+                            case 'Blank':
+                                if (object[key] || object[key].length !== 0) {
+                                    addError(key, 'This value should be blank');
+                                }
+                                break;
+                            case 'NotNull':
+                                if (!object[key]) {
+                                    addError(key, 'This value should exists');
+                                }
+                                break;
+                            case 'Null':
+                                if (object[key]) {
+                                    addError(key, 'This value should not exists');
+                                }
+                                break;
+                            case 'True':
+                                if (object[key] !== true) {
+                                    addError(key, 'This value should be true');
+                                }
+                                break;
+                            case 'False':
+                                if (object[key] !== false) {
+                                    addError(key, 'This value should be false');
+                                }
+                                break;
                             }
-                            break;
-                        case 'Blank':
-                            if (!object[key] || object[key] !== '') {
-                                addError(key, key + ': This value should be blank');
-                            }
-                            break;
-                        case 'NotNull':
-                            if (!object[key]) {
-                                addError(key, key + ': This value should exists');
-                            }
-                            break;
-                        case 'Null':
-                            if (object[key]) {
-                                addError(key, key + ': This value should not exists');
-                            }
-                            break;
-                        case 'True':
-                            if (object[key] === true) {
-                                addError(key, key + ': This value should be true');
-                            }
-                            break;
-                        case 'False':
-                            if (object[key] === false) {
-                                addError(key, key + ': This value should be false');
-                            }
-                            break;
-                        case 'Type':
-                            break;
-                        }
+                        });
                     });
 
                     return message;
