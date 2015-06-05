@@ -8,9 +8,10 @@
     'use strict';
     angular.module('marcopesani.ngFirebaseModel', ['firebase']).factory('$firebaseModel', [
         '$log',
+        '$q',
         '$firebaseArray',
         '$firebaseObject',
-        function ($log, $firebaseArray, $firebaseObject) {
+        function ($log, $q, $firebaseArray, $firebaseObject) {
             /**
              * This constructor should never be called manually.
              *
@@ -28,18 +29,29 @@
                 this.$$modelRef = firebaseReference.child(collectionName);
                 this.$$modelName = modelName;
                 this.$$modelCollection = collectionName;
-
                 this.$$schema = {};
 
                 return this;
             }
 
             FirebaseModel.prototype = {
-                // --------------------------------------------------------------------------------------
+                /**
+                 * Return a FirebaseArray containing all the objects present inside
+                 * the collection defined by the reference.
+                 *
+                 * @returns {FirebaseArray}
+                 * @constructor
+                 */
                 $all: function () {
                     return $firebaseArray(this.$$modelRef);
                 },
-                // --------------------------------------------------------------------------------------
+                /**
+                 * Return a FirebaseObject containg the value of the specified key.
+                 *
+                 * @param {String} id
+                 * @returns {FirebaseObject}
+                 * @constructor
+                 */
                 $one: function (id) {
                     var objRef = this.$$modelRef.child(id);
                     return $firebaseObject(objRef);
@@ -50,7 +62,7 @@
                         newObjRef = this.$$modelRef.push(obj);
 
                     newObjRef.once('value', function (snapshot) {
-                        var newObj = (snapshot) ? snapshot.val() : null;
+                        var newObj = (snapshot.exists()) ? snapshot.val() : null;
                         if (newObj) {
                             angular.forEach(newObj, function (value, key) {
                                 if (self.$$schema[key] && self.$$schema[key].type === 'relationship') {
@@ -66,7 +78,7 @@
                         removeObjRef = this.$$modelRef.child(id);
 
                     removeObjRef.once('value', function (snapshot) {
-                        var removeObj = (snapshot) ? snapshot.val() : null;
+                        var removeObj = (snapshot.exists()) ? snapshot.val() : null;
                         if (removeObj) {
                             angular.forEach(removeObj, function (value, key) {
                                 if (self.$$schema[key] && self.$$schema[key].type === 'relationship') {
@@ -81,10 +93,20 @@
                 $addRelationship: function (key, options) {
                     var attribute = {
                         type: 'relationship',
-                        foreingKey: options.foreingKey,
+                        localType: options.localType,
                         foreingType: options.foreingType,
                         foreingCollection: options.foreingCollection
                     };
+
+                    switch (attribute.foreingType) {
+                    case 'value':
+                        attribute.foreingKey = this.$$modelName;
+                        break;
+                    case 'collection':
+                        attribute.foreingKey = this.$$modelCollection;
+                        break;
+                    }
+
                     this.$$schema[key] = attribute;
                     return this;
                 },
@@ -116,15 +138,15 @@
                             }
                         };
 
-                    switch (typeof (value)) {
-                    case 'string':
+                    switch (options.localType) {
+                    case 'value':
                         insertRelation(id, value, options);
-                        return;
-                    case 'object':
+                        break;
+                    case 'collection':
                         angular.forEach(value, function (val, key) {
                             insertRelation(id, key, options);
                         });
-                        return;
+                        break;
                     default:
                         $log.error('$firebaseModel.$$createRelationship can handle only string or objects.');
                     }
@@ -149,15 +171,15 @@
                             }
                         };
 
-                    switch (typeof (value)) {
-                    case 'string':
+                    switch (options.localType) {
+                    case 'value':
                         removeRelation(id, value, options);
-                        return;
-                    case 'object':
+                        break;
+                    case 'collection':
                         angular.forEach(value, function (val, key) {
                             removeRelation(id, key, options);
                         });
-                        return;
+                        break;
                     default:
                         $log.error('$firebaseModel.$$removeRelationship can handle only string or objects.');
                     }
