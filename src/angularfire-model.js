@@ -125,13 +125,17 @@
                         foreingCollection: options.foreingCollection
                     };
 
-                    switch (attribute.foreingType) {
-                    case 'value':
-                        attribute.foreingKey = this.$$modelName;
-                        break;
-                    case 'collection':
-                        attribute.foreingKey = this.$$modelCollection;
-                        break;
+                    if (!options.foreingKey) {
+                        switch (attribute.foreingType) {
+                        case 'value':
+                            attribute.foreingKey = this.$$modelName;
+                            break;
+                        case 'collection':
+                            attribute.foreingKey = this.$$modelCollection;
+                            break;
+                        }
+                    } else {
+                        attribute.foreingKey = options.foreingKey;
                     }
 
                     this.$$schema[key] = attribute;
