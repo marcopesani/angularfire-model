@@ -7,7 +7,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('marcopesani.ngFirebaseModel', ['firebase']).factory('$firebaseModel', [
+    angular.module('marcopesani.ngFirebaseModel', ['firebase', 'angularMoment']).factory('$firebaseModel', [
         '$log',
         '$q',
         '$firebaseModelValidator',
@@ -239,12 +239,13 @@
  * Date: 31/05/2015
  * License: MIT
  */
-(function (angular, moment) {
+(function (angular) {
     'use strict';
 
     angular.module('marcopesani.ngFirebaseModel').factory('$firebaseModelValidator', [
         '$log',
-        function ($log) {
+        'moment',
+        function ($log, moment) {
             /**
              * This constructor should never be called manually.
              *
@@ -358,4 +359,4 @@
             };
             return FirebaseModelValidator;
         }]);
-}(window.angular, window.moment));
+}(window.angular));

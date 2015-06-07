@@ -20,6 +20,7 @@ module.exports = function (config) {
       'bower_components/firebase /firebase.js',
       'bower_components/angularfire/dist/angularfire.js',
       'bower_components/moment/moment.js',
+      'bower_components/angular-moment/angular-moment.js',
       'dist/angularfire-model.js',
       'test/model.js',
       'test/validator.js',

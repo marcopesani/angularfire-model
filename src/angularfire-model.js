@@ -7,7 +7,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('marcopesani.ngFirebaseModel', ['firebase']).factory('$firebaseModel', [
+    angular.module('marcopesani.ngFirebaseModel', ['firebase', 'angularMoment']).factory('$firebaseModel', [
         '$log',
         '$q',
         '$firebaseModelValidator',
