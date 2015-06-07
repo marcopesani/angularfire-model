@@ -4,7 +4,7 @@
  * Date: 31/05/2015
  * License: MIT
  */
-(function (angular) {
+(function (angular, moment) {
     'use strict';
 
     angular.module('marcopesani.ngFirebaseModel').factory('$firebaseModelValidator', [
@@ -29,7 +29,7 @@
             FirebaseModelValidator.prototype = {
                 /**
                  * Add a rule to validate a specific attribute of the model.
-                 * 
+                 *
                  * Validation rules inspired by:
                  * http://symfony.com/it/doc/current/book/validation.html
                  *
@@ -99,6 +99,21 @@
                                     addError(key, 'This value should be false');
                                 }
                                 break;
+                            case 'Date':
+                                if (!moment(object[key], 'YYYY-MM-DD').isValid()) {
+                                    addError(key, 'This is not a valid ISO8601 Date string, the format should be YY-MM-DD');
+                                }
+                                break;
+                            case 'Time':
+                                if (!moment(object[key], 'HH:mm:ssZ').isValid()) {
+                                    addError(key, 'This is not a valid ISO8601 Time string, the format should be HH:mm:ssZ');
+                                }
+                                break;
+                            case 'DateTime':
+                                if (!moment(object[key], 'YYYY-MM-DDTHH:mm:ssZ').isValid()) {
+                                    addError(key, 'This is not a valid ISO8601 DateTime string, the format should be YYYY-MM-DDTHH:mm:ssZ');
+                                }
+                                break;
                             }
                         });
                     });
@@ -108,4 +123,4 @@
             };
             return FirebaseModelValidator;
         }]);
-}(window.angular));
+}(window.angular, window.moment));

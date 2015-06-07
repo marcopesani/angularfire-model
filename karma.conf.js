@@ -19,6 +19,7 @@ module.exports = function (config) {
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/firebase /firebase.js',
       'bower_components/angularfire/dist/angularfire.js',
+      'bower_components/moment/moment.js',
       'dist/angularfire-model.js',
       'test/model.js',
       'test/validator.js',
@@ -62,7 +63,7 @@ module.exports = function (config) {
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: [
-            'Chrome', 
+            'Chrome',
             //'Safari', 
             //'Firefox', 
             'PhantomJS'
