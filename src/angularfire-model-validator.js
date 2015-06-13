@@ -81,7 +81,7 @@
                                 }
                                 break;
                             case 'NotNull':
-                                if (!object[key]) {
+                                if (!object[key] && object[key] !== false) {
                                     addError(key, 'This value should exists');
                                 }
                                 break;

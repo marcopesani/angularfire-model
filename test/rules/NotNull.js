@@ -10,7 +10,7 @@ describe('$firebaseModelValidator when the validation rule is set to "NotNull",'
         _$firebaseModelValidator = $firebaseModelValidator();
     }]));
 
-    it('should not validate an existing key', function () {
+    it('should validate an existing key', function () {
         var key = 'testKey';
         var type = 'NotNull';
         var object = {};
@@ -21,7 +21,7 @@ describe('$firebaseModelValidator when the validation rule is set to "NotNull",'
         expect(message.success).toBe(true);
     });
 
-    it('should validate a non existing key', function () {
+    it('should not validate a non existing key', function () {
         var key = 'testKey';
         var type = 'NotNull';
         var object = {};
@@ -34,5 +34,17 @@ describe('$firebaseModelValidator when the validation rule is set to "NotNull",'
         if (message[key]) {
             expect(message[key][0]).toBe('This value should exists');
         }
+    });
+    
+    it('should validate a key set to "false"', function () {
+        var key = 'testKey';
+        var type = 'NotNull';
+        var object = {};
+        
+        object[key] = false;
+        _$firebaseModelValidator.$addValidationRule(key, type);
+        var message = _$firebaseModelValidator.$validate(object);
+        
+        expect(message.success).toBe(true);
     });
 });
