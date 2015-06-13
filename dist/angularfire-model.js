@@ -37,6 +37,12 @@
                 this.$$validator = $firebaseModelValidator({
                     debug: true
                 });
+                
+                // Protected attributes
+                this.$$validator.$addValidationRule('createdOn', 'Null');
+                this.$$validator.$addValidationRule('createdBy', 'Null');
+                this.$$validator.$addValidationRule('editedOn', 'Null');
+                this.$$validator.$addValidationRule('editedBy', 'Null');
 
                 return this;
             }
@@ -311,7 +317,6 @@
                         var rules = self.$$rules[key];
 
                         angular.forEach(rules, function (rule) {
-
                             switch (rule.type) {
                             case 'NotBlank':
                                 if (!object[key] || object[key] === '') {

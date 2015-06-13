@@ -68,7 +68,6 @@
                         var rules = self.$$rules[key];
 
                         angular.forEach(rules, function (rule) {
-
                             switch (rule.type) {
                             case 'NotBlank':
                                 if (!object[key] || object[key] === '') {
