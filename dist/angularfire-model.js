@@ -13,7 +13,9 @@
         '$firebaseModelValidator',
         '$firebaseArray',
         '$firebaseObject',
-        function ($log, $q, $firebaseModelValidator, $firebaseArray, $firebaseObject) {
+        '$firebaseAuth',
+        'moment',
+        function ($log, $q, $firebaseModelValidator, $firebaseArray, $firebaseObject, $firebaseAuth, moment) {
             /**
              * This constructor should never be called manually.
              *
@@ -64,11 +66,17 @@
                 // --------------------------------------------------------------------------------------
                 $add: function (obj) {
                     var self = this,
+                        auth = $firebaseAuth(this.$$baseRef).$getAuth(),
                         newObjRef,
                         deferred = $q.defer(),
                         message = this.$$validator.$validate(obj);
 
                     if (message.success === true) {
+                        obj.createdOn = moment().format('YYYY-MM-DDTHH:mm:ssZ');
+                        obj.editedOn  = moment().format('YYYY-MM-DDTHH:mm:ssZ');
+                        obj.createdBy = (auth) ? auth.uid : 'guest';
+                        obj.editedBy = (auth) ? auth.uid : 'guest';
+                        
                         newObjRef = this.$$modelRef.push(obj);
                         newObjRef.once('value', function (snapshot) {
                             var newObj = (snapshot.exists()) ? snapshot.val() : null;
